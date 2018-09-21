@@ -1,6 +1,5 @@
 import { Credentials } from './../../credentials/credentials';
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import leaflet from 'leaflet';
 
 @Component({
@@ -9,12 +8,12 @@ import leaflet from 'leaflet';
 })
 export class LeafletMapComponent {
   @ViewChild('mapbox') mapContainer: ElementRef;
-  @Input() MapSize: any;
+  // @Input() MapSize: any;
 
   L: leaflet;
   map: any;
 
-  constructor(private geolocation: Geolocation) {
+  constructor() {
       this.L = leaflet;
   }
   
