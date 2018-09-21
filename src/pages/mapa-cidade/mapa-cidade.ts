@@ -2,17 +2,16 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-mapa-cidade',
+  templateUrl: 'mapa-cidade.html',
 })
-export class HomePage {
+export class MapaCidadePage {
 
   constructor(public navCtrl: NavController) {
-
   }
 
   ionViewDidLoad() {
-    console.log("HomePage");
+    console.log('ionViewDidLoad MapaCidadePage');
   }
 
 }
