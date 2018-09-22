@@ -41,10 +41,36 @@ export class LeafletMapComponent {
     }).addTo(this.map);
 
     // Adicionando o marker de localização do usuario
-    this.L.marker([51.505, -0.09]).addTo(this.map);
+    // this.L.marker([51.505, -0.09]).addTo(this.map);
 
-    // Mapa centraliza nessas coordenadas com animação
+    // Mapa centraliza nessas coordenadas com animação zoomIn
     this.map.flyTo([51.505, -0.09],15);
+
+
+    // Evento de click para gerar marcador
+    this.map.on('click', (event) => {
+      console.log('Map clicked!');
+      console.log(event);
+
+      this.map.flyTo([event.latlng.lat,event.latlng.lng]);
+
+      // Marcador onde o usuário clicou
+      this.L.marker([event.latlng.lat, event.latlng.lng],{
+        draggable: true
+      })
+        .on('click', (markerEvent) => {
+          console.log('Marker clicked!');
+          console.log(markerEvent);
+        })
+        .on('dragend', (markerEvent) => {
+          console.log('Marker finished drag!');
+          console.log(markerEvent);
+
+          // Move o mapa para a posição onde o usuário largou o marcador
+          this.map.flyTo([markerEvent.target._latlng.lat,markerEvent.target._latlng.lng]);
+        })
+        .addTo(this.map);
+    });
   }
 
 }
