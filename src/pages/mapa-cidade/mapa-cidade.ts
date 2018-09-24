@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController } from 'ionic-angular';
+import { NavController, AlertController, LoadingController, MenuController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 @Component({
@@ -13,7 +13,8 @@ export class MapaCidadePage {
     public navCtrl: NavController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private menuCtrl: MenuController
     ) {
   }
 
@@ -30,5 +31,9 @@ export class MapaCidadePage {
       buttons: ['Ok']
     }).present();
     
+  }
+
+  onShowMenu() {
+    this.menuCtrl.open()
   }
 }

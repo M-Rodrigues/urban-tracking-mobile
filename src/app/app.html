@@ -1,1 +1,20 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="mycontent" [swipeEnabled]="false">
+    <ion-header>
+        <ion-navbar>
+            <ion-title>
+            Menu
+            </ion-title>
+        </ion-navbar>
+    </ion-header>
+    <ion-content>
+        <ion-list inset>
+            <button ion-item menuClose>
+                Mapa da Cidade
+            </button>
+            <button ion-item>
+                Linhas
+            </button>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-nav #mycontent [root]="rootPage"></ion-nav>
