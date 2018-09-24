@@ -11,13 +11,16 @@ import { LeafletMapComponent } from './../components/leaflet-map/leaflet-map';
 import { MapaCidadePage } from './../pages/mapa-cidade/mapa-cidade';
 
 import { Geolocation } from '@ionic-native/geolocation';
+import { EstacoesProvider } from '../providers/estacoes/estacoes';
+import { EstacaoPopoverPage } from '../pages/estacao-popover/estacao-popover';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     MapaCidadePage,
-    LeafletMapComponent
+    LeafletMapComponent,
+    EstacaoPopoverPage
   ],
   imports: [
     BrowserModule,
@@ -27,13 +30,15 @@ import { Geolocation } from '@ionic-native/geolocation';
   entryComponents: [
     MyApp,
     HomePage,
-    MapaCidadePage
+    MapaCidadePage,
+    EstacaoPopoverPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    Geolocation
+    Geolocation,
+    EstacoesProvider
   ]
 })
 export class AppModule {}

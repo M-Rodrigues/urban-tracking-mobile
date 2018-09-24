@@ -29,51 +29,6 @@ export class MapaCidadePage {
       message: 'Em breve, feature de georreferenciamento',
       buttons: ['Ok']
     }).present();
-
-    // let alert = this.alertCtrl.create({
-    //   title: 'Localização GPS',
-    //   message: 'Deseja saber a localização do seu dispositivo?',
-    //   buttons: [{
-    //     text: 'Sim',
-    //     handler: () => {
-    //       // let navTransition = alert.dismiss();
-          
-    //       let loading = this.loadingCtrl.create({
-    //         content: 'Buscando...'
-    //       });
-    //       loading.present();
-
-    //       this.geolocation.getCurrentPosition()
-    //         .then((res) => {
-    //           loading.dismiss();
-    //           alert.dismiss();
-    //           this.alertCtrl.create({
-    //             title: 'Você está em:',
-    //             message: 'Latitude: '+res.coords.latitude+'\nLongitude: '+res.coords.longitude,
-    //             buttons: ['Ok']
-    //           }).present();
-    //           console.log(res);              
-    //         })
-    //         .catch((e) => {
-    //           loading.dismiss();
-    //           alert.dismiss();
-    //           this.alertCtrl.create({
-    //             title: 'Erro no Geolocation',
-    //             message: e.message,
-    //             buttons: ['Ok']
-    //           }).present();
-    //         });
-    //     }
-    //   },
-    //   {
-    //     text: 'Não',
-    //     role: 'cancel',
-    //     handler:() => {
-    //       console.log('Fechando Alert...');
-    //     }
-    //   }]
-    // });
-
-    // alert.present();
+    
   }
 }
