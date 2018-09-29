@@ -5,20 +5,30 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
 
+// Componentes
 import { LeafletMapComponent } from './../components/leaflet-map/leaflet-map';
-import { MapaCidadePage } from './../pages/mapa-cidade/mapa-cidade';
 
-import { Geolocation } from '@ionic-native/geolocation';
-import { EstacoesProvider } from '../providers/estacoes/estacoes';
+// Páginas
+import { MapaCidadePage } from './../pages/mapa-cidade/mapa-cidade';
+import { LinhaPage } from './../pages/linha/linha';
+import { ConsultarLinhasPage } from './../pages/consultar-linhas/consultar-linhas';
 import { EstacaoPopoverPage } from '../pages/estacao-popover/estacao-popover';
+import { SobreEsteAppPage } from '../pages/sobre-este-app/sobre-este-app';
+
+// Serviços
+import { EstacoesProvider } from '../providers/estacoes/estacoes';
+
+// Plugins
+import { Geolocation } from '@ionic-native/geolocation';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
     MapaCidadePage,
+    ConsultarLinhasPage,
+    LinhaPage,
+    SobreEsteAppPage,
     LeafletMapComponent,
     EstacaoPopoverPage
   ],
@@ -29,8 +39,10 @@ import { EstacaoPopoverPage } from '../pages/estacao-popover/estacao-popover';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
     MapaCidadePage,
+    ConsultarLinhasPage,
+    LinhaPage,
+    SobreEsteAppPage,
     EstacaoPopoverPage
   ],
   providers: [

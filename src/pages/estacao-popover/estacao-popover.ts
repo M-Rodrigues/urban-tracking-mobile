@@ -1,6 +1,6 @@
 import { Estacao } from './../../models/estacao';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 
 @Component({
   selector: 'page-estacao-popover',

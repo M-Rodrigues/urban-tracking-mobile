@@ -1,19 +1,16 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, LoadingController, MenuController } from 'ionic-angular';
-import { Geolocation } from '@ionic-native/geolocation';
+import { NavController, AlertController, MenuController } from 'ionic-angular';
 
 @Component({
   selector: 'page-mapa-cidade',
   templateUrl: 'mapa-cidade.html',
 })
 export class MapaCidadePage {
-  // MapSize: any = {height: 100, width: 100};
+  // Size: any = {height: 100, width: 100};
 
   constructor(
     public navCtrl: NavController,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
-    private geolocation: Geolocation,
     private menuCtrl: MenuController
     ) {
   }
@@ -34,6 +31,6 @@ export class MapaCidadePage {
   }
 
   onShowMenu() {
-    this.menuCtrl.open()
+    this.menuCtrl.open();
   }
 }

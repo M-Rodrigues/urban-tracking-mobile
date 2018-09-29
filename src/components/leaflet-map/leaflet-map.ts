@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { AlertController, PopoverController } from 'ionic-angular';
+import { PopoverController } from 'ionic-angular';
 import { Credentials } from './../../credentials/credentials';
 import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
@@ -16,7 +16,7 @@ import { EstacaoPopoverPage } from '../../pages/estacao-popover/estacao-popover'
 })
 export class LeafletMapComponent {
   @ViewChild('mapbox') mapContainer: ElementRef;
-  // @Input() MapSize: any;
+  //@Input() MapSize: any;
 
   L: leaflet
   map: any;
@@ -25,8 +25,7 @@ export class LeafletMapComponent {
   RouteCtrl: any;
   clickEvent: any;
 
-  constructor(private alertCtrl: AlertController,
-              private popoverCtrl: PopoverController,
+  constructor(private popoverCtrl: PopoverController,
               private estacoesProvider: EstacoesProvider) {
       this.L = leaflet;
   }
@@ -37,6 +36,7 @@ export class LeafletMapComponent {
 
     this.estacoes = this.estacoesProvider.getEstacoes();
 
+    console.log(this.estacoes);
     this.loadMap();
   }
 
@@ -46,7 +46,8 @@ export class LeafletMapComponent {
     // Criando o mapa
     this.map = this.L.map('mapbox', {
       center: [-22.954530252408052, -43.167351521806495],
-      zoom: 13
+      zoom: 13,
+      zoomControl: false
     });
     
     // Mapa centraliza nessas coordenadas com animação zoomIn
@@ -61,6 +62,7 @@ export class LeafletMapComponent {
       accessToken: Credentials.getMapBoxAccessToken()
     }).addTo(this.map);
 
+    // Marcador para cada estacao
     this.estacoes.forEach(estacao => {
       this.L.marker(estacao.geo)
         .on('click', (estacaoEvent => {
