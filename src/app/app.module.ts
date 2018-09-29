@@ -1,3 +1,4 @@
+import { TruncatePipe } from './../pipes/truncate/truncate';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -11,13 +12,16 @@ import { LeafletMapComponent } from './../components/leaflet-map/leaflet-map';
 
 // Páginas
 import { MapaCidadePage } from './../pages/mapa-cidade/mapa-cidade';
-import { LinhaPage } from './../pages/linha/linha';
 import { ConsultarLinhasPage } from './../pages/consultar-linhas/consultar-linhas';
 import { EstacaoPopoverPage } from '../pages/estacao-popover/estacao-popover';
 import { SobreEsteAppPage } from '../pages/sobre-este-app/sobre-este-app';
+import { EstacaoInfoPage } from './../pages/estacao-info/estacao-info';
+import { LinhaInfoPage } from './../pages/linha-info/linha-info';
 
 // Serviços
 import { EstacoesProvider } from '../providers/estacoes/estacoes';
+import { ModaisProvider } from '../providers/modais/modais';
+import { LinhasProvider } from '../providers/linhas/linhas';
 
 // Plugins
 import { Geolocation } from '@ionic-native/geolocation';
@@ -25,12 +29,14 @@ import { Geolocation } from '@ionic-native/geolocation';
 @NgModule({
   declarations: [
     MyApp,
+    TruncatePipe,
     MapaCidadePage,
     ConsultarLinhasPage,
-    LinhaPage,
     SobreEsteAppPage,
     LeafletMapComponent,
-    EstacaoPopoverPage
+    EstacaoPopoverPage,
+    LinhaInfoPage,
+    EstacaoInfoPage
   ],
   imports: [
     BrowserModule,
@@ -41,16 +47,19 @@ import { Geolocation } from '@ionic-native/geolocation';
     MyApp,
     MapaCidadePage,
     ConsultarLinhasPage,
-    LinhaPage,
     SobreEsteAppPage,
-    EstacaoPopoverPage
+    EstacaoPopoverPage,
+    LinhaInfoPage,
+    EstacaoInfoPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Geolocation,
-    EstacoesProvider
+    EstacoesProvider,
+    ModaisProvider,
+    LinhasProvider
   ]
 })
 export class AppModule {}

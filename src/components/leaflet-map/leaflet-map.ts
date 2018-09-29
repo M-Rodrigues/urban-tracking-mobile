@@ -34,7 +34,7 @@ export class LeafletMapComponent {
     console.log('Hello LeafletMapComponent Component');
     this.rota = [];
 
-    this.estacoes = this.estacoesProvider.getEstacoes();
+    this.estacoes = this.estacoesProvider.getTodasEstacoes();
 
     console.log(this.estacoes);
     this.loadMap();

@@ -1,11 +1,12 @@
 <ion-menu [content]="mycontent" [swipeEnabled]="false">
     <ion-header>
-        <ion-navbar>
+        <ion-navbar color="primary">
             <ion-title>Menu</ion-title>
         </ion-navbar>
     </ion-header>
     <ion-content>
-        <ion-list inset>
+        <ion-list>
+            <ion-list-header>Sistema de Monitoramento e Mobilidade Urbana</ion-list-header>
             <button ion-item (click)="toMapaCidade()" menuClose>
                 Mapa da Cidade
             </button>
@@ -15,7 +16,7 @@
         </ion-list>
     </ion-content>
     <ion-footer no-border class='sideMenuFooter'>
-        <ion-toolbar color="light">
+        <ion-navbar color="light">
             <button 
                 ion-button 
                 full 
@@ -26,9 +27,9 @@
                 (click)="toSobreEsteApp()">
                 
                 Sobre este App
-                <ion-icon name="information-circle"></ion-icon>
+                <ion-icon name="information-circle-outline"></ion-icon>
             </button>
-        </ion-toolbar>
+        </ion-navbar>
     </ion-footer>
 </ion-menu>
 <ion-nav #mycontent [root]="rootPage"></ion-nav>
