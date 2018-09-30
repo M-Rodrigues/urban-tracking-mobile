@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { PopoverController } from 'ionic-angular';
 import { Credentials } from './../../credentials/credentials';
 import leaflet from 'leaflet';
@@ -14,20 +14,19 @@ import { EstacaoPopoverPage } from '../../pages/estacao-popover/estacao-popover'
   selector: 'leaflet-map',
   templateUrl: 'leaflet-map.html'
 })
-export class LeafletMapComponent {
-  @ViewChild('mapbox') mapContainer: ElementRef;
-  //@Input() MapSize: any;
-
-  L: leaflet
+export class LeafletMapComponent {  
+  L: leaflet;
   map: any;
   rota: any[];
   estacoes: Estacao[];
   RouteCtrl: any;
   clickEvent: any;
 
-  constructor(private popoverCtrl: PopoverController,
-              private estacoesProvider: EstacoesProvider) {
-      this.L = leaflet;
+  constructor(
+    private popoverCtrl: PopoverController,
+    private estacoesProvider: EstacoesProvider
+  ) {
+    this.L = leaflet;
   }
   
   ngOnInit() {
@@ -36,14 +35,13 @@ export class LeafletMapComponent {
 
     this.estacoes = this.estacoesProvider.getTodasEstacoes();
 
-    console.log(this.estacoes);
+    // console.log(this.estacoes);
     this.loadMap();
   }
 
   loadMap() {
-    console.log('Loading Map Component...');
-
     // Criando o mapa
+    console.log("Criando mapa");
     this.map = this.L.map('mapbox', {
       center: [-22.954530252408052, -43.167351521806495],
       zoom: 13,
@@ -153,10 +151,15 @@ export class LeafletMapComponent {
   }
 
   onClick(event) {
-    console.log("Click sobre o mapa!");
+    // console.log("Click sobre o mapa!");
     //console.log(event);
 
     this.clickEvent = event;
   }
-}
 
+
+  ngOnDestroy() {
+    console.log('Fechando mapa...');
+    this.map.remove();
+  }
+}

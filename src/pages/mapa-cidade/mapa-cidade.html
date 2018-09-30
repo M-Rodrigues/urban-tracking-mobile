@@ -1,35 +1,15 @@
-<!-- <ion-header>
-  <ion-navbar>
-    <ion-buttons start>
-        <button ion-button icon-only (click)="onShowMenu()">
-          <ion-icon name="menu"></ion-icon>
-        </button>
-      </ion-buttons>
-    <ion-title middle>
-      Mapa da Cidade
-    </ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)='onLocate()'>
-        <ion-icon name="locate"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header> -->
-
-
 <ion-content>
-    <ion-fab top left>
-      <button ion-fab mini (click)="onShowMenu()">
-        <ion-icon name="menu"></ion-icon>
-      </button>
-      <!-- <ion-fab-list>
-        <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
-      </ion-fab-list> -->
-    </ion-fab>
-  <div style='height: 100%; width: 100%'>
-    <leaflet-map></leaflet-map>
+  <ion-fab top left>
+    <button ion-fab mini (click)="onShowMenu()">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-fab>
+
+  
+  <div
+    id='mapaCidade' 
+    style='height: 100%; width: 100%'
+    (click)="onClick($event)">
   </div>
+
 </ion-content>

@@ -25,15 +25,16 @@ import { LinhasProvider } from '../providers/linhas/linhas';
 
 // Plugins
 import { Geolocation } from '@ionic-native/geolocation';
+import { DatabaseProvider } from '../providers/database/database';
 
 @NgModule({
   declarations: [
+    LeafletMapComponent,
     MyApp,
     TruncatePipe,
     MapaCidadePage,
     ConsultarLinhasPage,
     SobreEsteAppPage,
-    LeafletMapComponent,
     EstacaoPopoverPage,
     LinhaInfoPage,
     EstacaoInfoPage
@@ -44,6 +45,7 @@ import { Geolocation } from '@ionic-native/geolocation';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
+    LeafletMapComponent,
     MyApp,
     MapaCidadePage,
     ConsultarLinhasPage,
@@ -59,7 +61,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     Geolocation,
     EstacoesProvider,
     ModaisProvider,
-    LinhasProvider
+    LinhasProvider,
+    DatabaseProvider
   ]
 })
 export class AppModule {}

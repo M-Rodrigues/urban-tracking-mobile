@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../database/database';
 import { Estacao } from './../../models/estacao';
 import { Rota } from './../../models/rota';
 import { Linha } from './../../models/linha';
@@ -7,39 +8,20 @@ import { Injectable } from '@angular/core';
 export class LinhasProvider {
   linhas: Linha[] = [];
 
-  constructor() {
+  constructor(
+    private db: DatabaseProvider
+  ) {
     console.log('Hello LinhasProvider Provider');
   }
 
   getTodasLinhas() {
-    return [
-      {
-        id: 1,
-        nome: '30 - Alvorada x Galeão - Semidireto',
-        idModal: 1,
-        rotas: []
-      },
-      {
-        id: 1,
-        nome: '30 - Alvorada x Galeão - Semidireto',
-        idModal: 1,
-        rotas: []
-      },
-      {
-        id: 1,
-        nome: '30 - Alvorada x Galeão - Semidireto',
-        idModal: 1,
-        rotas: []
-      },
-      {
-        id: 1,
-        nome: '30 - Alvorada x Galeão - Semidireto',
-        idModal: 1,
-        rotas: []
-      },];
+    this.refreshLinhas();
+    return this.linhas;
   }
-
+  
   getLinhasDeUmModal(id) {
+    this.refreshLinhas();
+    
     let ans: Linha[];
     this.linhas.forEach(linha => {
       if (linha.idModal == id) {
@@ -49,19 +31,9 @@ export class LinhasProvider {
     return ans;
   }
 
-  getRotasQuePassamPorUmaEstacao(id) {
-    let ans: Rota[];
-    
-    this.linhas.forEach((linha: Linha) => {
-      linha.rotas.forEach((rota: Rota) => {
-        rota.estacoes.forEach((estacao: Estacao) => {
-          if (estacao.id == id) {
-            ans.push(rota);
-          }
-        });
-      });
-    });
-
-    return ans;
+  refreshLinhas() {
+    this.linhas = this.db.getLinhas();
   }
+
+
 }

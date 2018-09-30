@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../database/database';
 import { Injectable } from '@angular/core';
 import { Modal } from './../../models/modal';
 
@@ -5,37 +6,25 @@ import { Modal } from './../../models/modal';
 export class ModaisProvider {
   modais: Modal[];
 
-  constructor() {
+  constructor(
+    private db: DatabaseProvider
+  ) {
+    this.refreshModais();
     console.log('Hello ModaisProvider Provider');
-    this.modais = [
-      {
-        id: 1,
-        nome: 'Metrô'
-      },
-      {
-        id: 2,
-        nome: 'BRT'
-      },
-      {
-        id: 3,
-        nome: 'VLT'
-      }
-    ];
   }
-
 
   getTodosModais() {
+    this.refreshModais();
     return this.modais;
   }
-
-  getNomeModalById(idModal) {
-    let nomeModal: string;
+  
+  getModal(idModal) {
+    this.refreshModais();
     
-    this.modais.forEach(modal => {
-      if (modal.id === idModal)
-        nomeModal = modal.nome;
-    });
-    
-    return nomeModal;
+    return this.db.getModal(idModal);
+  }
+  
+  refreshModais() {
+    this.modais = this.db.getModais();
   }
 }

@@ -18,7 +18,7 @@ export class EstacaoPopoverPage {
     private modaisService: ModaisProvider
   ) {
     this.estacao = this.navParams.data;
-    this.modal =  this.modaisService.getNomeModalById(this.estacao.idModal);
+    this.modal =  this.modaisService.getModal(this.estacao.idModal);
   }
 
   ionViewWillEnter(){

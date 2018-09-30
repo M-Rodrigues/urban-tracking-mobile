@@ -4,6 +4,11 @@
         <ion-icon name="menu"></ion-icon>
       </button>
     <ion-title>Consultar Linhas</ion-title>
+    <ion-buttons end>
+      <button ion-button clear icon-only (click)="setFilter()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -11,22 +16,26 @@
   <ion-searchbar (ionInput)="buscarLinha($event)"></ion-searchbar>
   <ion-list>
     <ion-item>
-      <h2>Linhas</h2>
-      <button ion-button clear item-end icon-only (click)="setFilter()">
-        <ion-icon name="funnel"></ion-icon>
-      </button>
-    </ion-item>
-
-    <ion-item *ngFor="let linha of linhas" (click)="onLinhaInfo(linha)">
-      <ion-icon [name]="selectModalIcon(linha.idModal)" item-start></ion-icon>
       <ion-grid no-padding>
         <ion-row>
           <ion-col col-10>
-            <h2>{{linha.nome | truncate }}</h2>
-            <p>{{nomeModal(linha.idModal)}}</p>
+            <p>Linhas</p>
           </ion-col>
           <ion-col col-2 text-center>
             <p>Rotas</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+    <ion-item *ngFor="let linha of linhasList" (click)="onLinhaInfo(linha)">
+      <!-- <ion-icon [name]="selectModalIcon(linha.idModal)" item-start></ion-icon> -->
+      <ion-grid no-padding>
+        <ion-row>
+          <ion-col col-10>
+            <h2>{{linha.nome | truncate : 30 }}</h2>
+            <p>{{nomeModal(linha.idModal)}}</p>
+          </ion-col>
+          <ion-col col-2 text-center>
             <ion-badge>{{linha.rotas.length}}</ion-badge>
           </ion-col>
         </ion-row>
