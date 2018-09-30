@@ -3,7 +3,7 @@ import { Linha } from './../../models/linha';
 import { LinhaInfoPage } from './../linha-info/linha-info';
 import { LinhasProvider } from './../../providers/linhas/linhas';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, AlertController, ToastController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -22,7 +22,8 @@ export class ConsultarLinhasPage {
     private menuCtrl: MenuController,
     private alertCtrl: AlertController,
     private linhaService: LinhasProvider,
-    private modalService: ModaisProvider
+    private modalService: ModaisProvider,
+    private toastCtrl: ToastController
   ) {
     this.loadLinhas();
     
@@ -36,20 +37,17 @@ export class ConsultarLinhasPage {
     this.filtros = [];
     this.modais.forEach(modal => {
       this.filtros.push(modal.id+'');
-    })
+    });
   }
   
   // Faz requisição para buscar as linhas do sistema
   loadLinhas() {
     this.linhas = this.linhaService.getTodasLinhas();
     this.linhasList = this.linhas;
-
   }
 
   // Abre menu lateral
-  showMenu() {
-    this.menuCtrl.open();
-  }
+  showMenu() { this.menuCtrl.open(); }
 
   // Abre o popover ou alert para o ususario escolher o filtro das linha (só modal)
   setFilter() {
@@ -86,9 +84,7 @@ export class ConsultarLinhasPage {
   isModalSelecionado(id) {
     let flag = 0;
     this.filtros.forEach(idModal => {
-      console.log(idModal + " : " + id);
       if (idModal == id) {
-        console.log("Iguais!");
         flag = 1;
       }
     });
@@ -113,8 +109,15 @@ export class ConsultarLinhasPage {
 
   // Vai pra página de informações da linha
   onLinhaInfo(linha) {
-    console.log(linha);
-    this.navCtrl.push(LinhaInfoPage,linha);
+    if (linha.rotas.length == 0) {
+      this.toastCtrl.create({
+        message: 'Linha não possui rotas cadastradas ainda...',
+        duration: 4000
+      }).present();
+    } else {
+      this.navCtrl.push(LinhaInfoPage,linha);
+    }
+
   }
 
   // Busca o nome do modal

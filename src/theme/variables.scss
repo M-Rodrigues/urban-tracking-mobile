@@ -78,11 +78,21 @@ $colors: (
 // The premium icon font for Ionic. For more info, please see:
 // http://ionicframework.com/docs/ionicons/
 
-@import "ionic.ionicons";
+@import "ionicons";
 
 
 // Fonts
 // --------------------------------------------------
 
-@import "roboto";
-@import "noto-sans";
+// @import "roboto";
+// @import "noto-sans";
+
+@font-face {
+  font-family: "Open Sans";
+  font-style: regular;
+  font-weight: 400;
+  src: url("../assets/fonts/Open_Sans/OpenSans-Regular.ttf")
+}
+
+$font-family-base: "Open Sans";
+

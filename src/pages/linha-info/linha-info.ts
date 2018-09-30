@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, LoadingController } from 'ionic-angular';
 import leaflet from 'leaflet';
 import 'leaflet-routing-machine';
 import { Credentials } from '../../credentials/credentials';
 import { Estacao } from '../../models/estacao';
-import { EstacaoPopoverPage } from '../estacao-popover/estacao-popover';
+import { LinhasProvider } from '../../providers/linhas/linhas';
 
 @IonicPage()
 @Component({
@@ -15,29 +15,31 @@ export class LinhaInfoPage {
   map: any;
   L: leaflet;
   routeCtrl: any;
-  clickEvent: any;
   rotaEscolhida: number = 0;
-  
+  trajetoRota: any[];
+  polyline: any;
+  nomeRota: string;
+  nomeLinha: string;
+  marcadoresDeEstacao: any[] = [];
   linha: any;
   
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    private popoverCtrl: PopoverController
+    private actSheetCtrl: ActionSheetController,
+    private loadingCtrl: LoadingController,
+    private linhaService: LinhasProvider
   ) {
     this.L = leaflet;
-    this.routeCtrl =
+    this.linha = this.navParams.data;  
 
-    this.linha = this.navParams.data;
-
-    console.log(this.linha);    
+    this.refreshNomeRota();
+    this.refreshTrajetoRota();
   }
   
   ionViewDidLoad() {
     console.log('ionViewDidLoad LinhaInfoPage');
-    
-    console.log(this.linha);
     
     this.criarMapa();
   }
@@ -66,6 +68,12 @@ export class LinhaInfoPage {
     // Controlador de Rotas
     // this.criarControladorRotas();
 
+    // Polyline
+    this.polyline = this.L.polyline([], {
+      color: 'red', 
+    });
+    this.polyline.addTo(this.map);
+
     // Exibindo primeira rota dessa linha
     this.escolherRota();
   }
@@ -89,36 +97,74 @@ export class LinhaInfoPage {
   }
 
   escolherRota() {
+    let loading = this.loadingCtrl.create();
+    loading.present();
+    
     // Remove os marcadores antigos do mapa
+    this.removerMarcadoresDoMapa();
 
     // Colocar marcadores no mapa indicando as estações dessa rota
     let mkEstacoes = [];
 
     this.linha.rotas[this.rotaEscolhida].trajeto.forEach((estacao: Estacao) => {
       mkEstacoes.push(estacao.geo);
-      
-      this.L.marker(estacao.geo)
-        .on('click', (ev => {
-          this.map.flyTo(estacao.geo);
 
-          let popover = this.popoverCtrl.create(EstacaoPopoverPage, estacao);
-          if (this.clickEvent) popover.present({ ev: this.clickEvent });
-        }))
-        .addTo(this.map);
+      let marker = this.L.marker(estacao.geo);      
+      marker.addTo(this.map);
+
+      this.marcadoresDeEstacao.push(marker);  
     })
 
     // Centralizar mapa nessasestações
     this.map.flyToBounds(mkEstacoes);
-
-    // // Calcula nova Rota
-    // this.routeCtrl.setWaypoints(mkEstacoes);
   
     // Marca uma linha passando pelas estações
-    this.L.polyline(mkEstacoes, {color: 'red'}).addTo(this.map);
+   this.refreshPolyline(mkEstacoes);
+
+    loading.dismiss();
   }
 
-  onClick(ev) {
-    this.clickEvent = ev;
+  // Action Sheet com as rotas possíveis
+  onEscolherRota() {
+    let action = this.actSheetCtrl.create();
+
+    this.linha.rotas.forEach(rota => {
+      action.addButton({
+        text: rota.nome,
+        handler: () => {
+          this.rotaEscolhida = this.linhaService.getRotaIndex(this.linha, rota);
+
+          this.refreshNomeRota();
+          this.refreshTrajetoRota();
+
+          this.escolherRota();
+        }
+      });
+    });
+
+    action.present();
   }
+
+  focarNumaEstacao(estacao) {
+    this.map.flyTo(estacao.geo,15);
+  }
+
+
   
+  refreshNomeRota() { 
+    this.nomeRota = this.linha.rotas[this.rotaEscolhida].nome; 
+  }
+
+  refreshTrajetoRota() {
+    this.trajetoRota = this.linha.rotas[this.rotaEscolhida].trajeto;
+  }
+
+  refreshPolyline(latLng) {
+    this.polyline.setLatLngs(latLng, {color: 'red'});
+  }
+
+  removerMarcadoresDoMapa() {
+    this.marcadoresDeEstacao.forEach(marker => marker.removeFrom(this.map) );
+    this.marcadoresDeEstacao = [];
+  }  
 }

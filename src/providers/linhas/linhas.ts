@@ -1,6 +1,4 @@
 import { DatabaseProvider } from './../database/database';
-import { Estacao } from './../../models/estacao';
-import { Rota } from './../../models/rota';
 import { Linha } from './../../models/linha';
 import { Injectable } from '@angular/core';
 
@@ -29,6 +27,19 @@ export class LinhasProvider {
       }
     })
     return ans;
+  }
+  
+  getRotaIndex(linha, rota) {
+    console.log("Procurando rota: " + rota.nome + " na linha: " + linha.nome);
+    let index = 0;
+    for (let i = 0; i < linha.rotas.length; i++) {
+      console.log(linha.rotas[i].id + " - " + rota.id);
+      if (linha.rotas[i].id == rota.id) {
+        index = i;
+      }
+    }
+    console.log("index: "+index);
+    return index;
   }
 
   refreshLinhas() {
