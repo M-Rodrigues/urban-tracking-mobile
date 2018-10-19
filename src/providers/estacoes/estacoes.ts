@@ -1,13 +1,15 @@
 import { DatabaseProvider } from './../database/database';
 import { Estacao } from './../../models/estacao';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class EstacoesProvider {
   estacoes: Estacao[];
 
   constructor(
-    private db: DatabaseProvider
+    private db: DatabaseProvider,
+    public httpClient: HttpClient
   ) {
     this.refreshEstacoes();
     console.log('Hello EstacoesProvider Provider');
@@ -33,5 +35,9 @@ export class EstacoesProvider {
   
   refreshEstacoes() {
     this.estacoes = this.db.getEstacoes();
+  }
+
+  getEstacoesAPI() {
+    return this.httpClient.get("https://stark-woodland-16146.herokuapp.com/estacoes");
   }
 }

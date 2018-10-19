@@ -1,10 +1,9 @@
-import { DatabaseProvider } from './../../providers/database/database';
+import { Estacao } from './../../models/estacao';
 import { EstacoesProvider } from './../../providers/estacoes/estacoes';
 import { Component } from '@angular/core';
 import { NavController, AlertController, MenuController, PopoverController } from 'ionic-angular';
 import leaflet from 'leaflet';
 import { Credentials } from '../../credentials/credentials';
-import { Estacao } from '../../models/estacao';
 import { EstacaoPopoverPage } from '../estacao-popover/estacao-popover';
 
 @Component({
@@ -22,30 +21,19 @@ export class MapaCidadePage {
     private alertCtrl: AlertController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
-    private estacaoService: EstacoesProvider,
-    private db: DatabaseProvider
+    private estacaoService: EstacoesProvider  
   ) {
     console.log("MapaCidadePage::")
     this.L = leaflet;
-    this.estacoes = this.estacaoService.getTodasEstacoes();
 
-    // console.log("::db.getModais()")
-    // console.log(this.db.getModais());
-    // console.log("::db.getEstacoes()")
-    // console.log(this.db.getEstacoes());
-    // console.log("::db.getEstacao(4)")
-    // console.log(this.db.getEstacao(4));
-    // console.log("::db.getLinhas()")
-    // console.log(this.db.getLinhas());
+    this.estacaoService.getEstacoesAPI()
+      .subscribe((data: Estacao[]) => {
+        this.estacoes = data;
+        this.criarMapa(data);
+      });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad MapaCidadePage');
-
-    this.criarMapa();
-  }
-  
-  criarMapa() {
+  criarMapa(estacoes) {
     // Criando Mapa
     this.map = this.L.map('mapaCidade', {
       center: [-22.954530252408052, -43.167351521806495],
@@ -67,10 +55,13 @@ export class MapaCidadePage {
     this.map.flyTo([-22.954530252408052, -43.167351521806495],14);
     
     // Marcador para cada estacao
-    this.estacoes.forEach(estacao => {
+    this.adicionarMarcadoresDasEstacoes(estacoes);
+  }
+
+  adicionarMarcadoresDasEstacoes(estacoes) {
+    estacoes.forEach(estacao => {
       this.L.marker(estacao.geo)
         .on('click', (estacaoEvent => {
-          //console.log(estacaoEvent);
           this.map.flyTo(estacao.geo);
 
           let popover = this.popoverCtrl.create(EstacaoPopoverPage, estacao);

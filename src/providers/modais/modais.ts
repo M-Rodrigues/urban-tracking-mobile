@@ -1,13 +1,16 @@
 import { DatabaseProvider } from './../database/database';
 import { Injectable } from '@angular/core';
 import { Modal } from './../../models/modal';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ModaisProvider {
   modais: Modal[];
 
   constructor(
-    private db: DatabaseProvider
+    private db: DatabaseProvider,
+    public httpClient: HttpClient
+
   ) {
     this.refreshModais();
     console.log('Hello ModaisProvider Provider');
@@ -26,5 +29,9 @@ export class ModaisProvider {
   
   refreshModais() {
     this.modais = this.db.getModais();
+  }
+
+  getModaisAPI() {
+    return this.httpClient.get('https://stark-woodland-16146.herokuapp.com/modais');
   }
 }

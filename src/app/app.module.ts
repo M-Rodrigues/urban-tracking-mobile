@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 
 // Componentes
 import { LeafletMapComponent } from './../components/leaflet-map/leaflet-map';
@@ -22,10 +23,10 @@ import { LinhaInfoPage } from './../pages/linha-info/linha-info';
 import { EstacoesProvider } from '../providers/estacoes/estacoes';
 import { ModaisProvider } from '../providers/modais/modais';
 import { LinhasProvider } from '../providers/linhas/linhas';
+import { DatabaseProvider } from '../providers/database/database';
 
 // Plugins
 import { Geolocation } from '@ionic-native/geolocation';
-import { DatabaseProvider } from '../providers/database/database';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DatabaseProvider } from '../providers/database/database';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
