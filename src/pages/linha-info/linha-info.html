@@ -13,18 +13,6 @@
       style='height: 45%; width: 100%'>
     </div>
     
-    <!-- <ion-fab right top>
-      <button ion-fab>
-        <ion-icon name="pin"></ion-icon>
-      </button>
-    </ion-fab> -->
-    
-    <!-- <ion-item>
-      <ion-icon name="football" item-start large></ion-icon>
-      <h2>Museum of Football</h2>
-      <p>11 N. Way St, Madison, WI 53703</p>
-    </ion-item> -->
-
     <button ion-item (click)="onEscolherRota()">
       <p>Sentido</p>
       <h3><b>{{nomeRota}}</b></h3>
@@ -33,9 +21,7 @@
 
     <ion-scroll style="width: 100%; height: 50vh;" scrollY='true'>
       <ion-list>
-        <!-- <ion-item *ngFor="let estacao of linha.rotas[this.rotaEscolhida].trajeto; let i = index"> -->
         <ion-item *ngFor="let estacao of trajetoRota; let i = index" (click)="focarNumaEstacao(estacao)">
-          <!-- <ion-icon [name]="i+1 == linha.rotas[this.rotaEscolhida].trajeto.length ? 'my-finish-flag' : 'arrow-down'" item-start></ion-icon> -->
           <p>{{estacao.nome}}</p>
         </ion-item>
       </ion-list>

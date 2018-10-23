@@ -45,6 +45,10 @@ export class LinhasProvider {
     return index;
   }
 
+  getLinhasPorEstacao(id: number) {
+    return this.httpClient.get("https://stark-woodland-16146.herokuapp.com/linhas/estacao/" + id);
+  }
+
   refreshLinhas() {
     this.linhas = this.db.getLinhas();
   }

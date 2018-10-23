@@ -1,7 +1,9 @@
-import { ModaisProvider } from './../../providers/modais/modais';
 import { Estacao } from './../../models/estacao';
+import { Modal } from './../../models/modal';
+import { Linha } from './../../models/linha';
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { LinhasProvider } from '../../providers/linhas/linhas';
 
 @Component({
   selector: 'page-estacao-popover',
@@ -9,16 +11,24 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
 })
 export class EstacaoPopoverPage {
   estacao: Estacao;
-  modal: string;
+  modal: Modal;
+  linhas: Linha[];
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    private modaisService: ModaisProvider
+    private linhaService: LinhasProvider  
   ) {
-    this.estacao = this.navParams.data;
-    this.modal =  this.modaisService.getModal(this.estacao.idModal);
+    this.estacao = this.navParams.data.estacao;
+    let aux : Modal[] = this.navParams.data.modais;
+    this.modal =  aux.find((modal: Modal) => { return modal.id == this.estacao.idModal });
+
+    this.linhaService.getLinhasPorEstacao(this.estacao.id)
+      .subscribe((data: Linha[]) => {
+        this.linhas = data;
+        console.log(this.linhas);
+      })
   }
 
   ionViewWillEnter(){

@@ -1,10 +1,12 @@
 import { Estacao } from './../../models/estacao';
+import { Modal } from './../../models/modal';
 import { EstacoesProvider } from './../../providers/estacoes/estacoes';
 import { Component } from '@angular/core';
 import { NavController, AlertController, MenuController, PopoverController } from 'ionic-angular';
 import leaflet from 'leaflet';
 import { Credentials } from '../../credentials/credentials';
 import { EstacaoPopoverPage } from '../estacao-popover/estacao-popover';
+import { ModaisProvider } from '../../providers/modais/modais';
 
 @Component({
   selector: 'page-mapa-cidade',
@@ -15,13 +17,17 @@ export class MapaCidadePage {
   L: leaflet;
   clickEvent: any;
   estacoes: Estacao[];
+  modais: Modal[];
+
+  visible: boolean;
 
   constructor(
     public navCtrl: NavController,
     private alertCtrl: AlertController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
-    private estacaoService: EstacoesProvider  
+    private estacaoService: EstacoesProvider,
+    private modalService: ModaisProvider  
   ) {
     console.log("MapaCidadePage::")
     this.L = leaflet;
@@ -31,6 +37,13 @@ export class MapaCidadePage {
         this.estacoes = data;
         this.criarMapa(data);
       });
+    
+    this.modalService.getModaisAPI()
+      .subscribe((data: Modal[]) => {
+        this.modais = data;
+      })  
+
+    this.visible = true;
   }
 
   criarMapa(estacoes) {
@@ -64,8 +77,16 @@ export class MapaCidadePage {
         .on('click', (estacaoEvent => {
           this.map.flyTo(estacao.geo);
 
-          let popover = this.popoverCtrl.create(EstacaoPopoverPage, estacao);
-          if (this.clickEvent) popover.present({ ev: this.clickEvent });
+          let popover = this.popoverCtrl.create(EstacaoPopoverPage, {estacao: estacao, modais: this.modais }, {showBackdrop: true});
+          let ev = { target : { getBoundingClientRect : () => { return {
+                  top: '65',
+                  left: '0'
+                };
+              }
+            }
+          };
+          
+          if (this.clickEvent) popover.present({ ev });
         }))
         .addTo(this.map);
     });
