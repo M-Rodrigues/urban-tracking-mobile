@@ -1,12 +1,18 @@
+import { Component } from '@angular/core';
+import leaflet from 'leaflet';
+
+import { NavController, AlertController, MenuController, PopoverController } from 'ionic-angular';
+
+import { EstacaoPopoverPage } from '../estacao-popover/estacao-popover';
+
 import { Estacao } from './../../models/estacao';
 import { Modal } from './../../models/modal';
-import { EstacoesProvider } from './../../providers/estacoes/estacoes';
-import { Component } from '@angular/core';
-import { NavController, AlertController, MenuController, PopoverController } from 'ionic-angular';
-import leaflet from 'leaflet';
+import { Linha } from '../../models/linha';
 import { Credentials } from '../../credentials/credentials';
-import { EstacaoPopoverPage } from '../estacao-popover/estacao-popover';
+
+import { EstacoesProvider } from './../../providers/estacoes/estacoes';
 import { ModaisProvider } from '../../providers/modais/modais';
+import { LinhasProvider } from './../../providers/linhas/linhas';
 
 @Component({
   selector: 'page-mapa-cidade',
@@ -19,17 +25,16 @@ export class MapaCidadePage {
   estacoes: Estacao[];
   modais: Modal[];
 
-  visible: boolean;
-
   constructor(
     public navCtrl: NavController,
     private alertCtrl: AlertController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
     private estacaoService: EstacoesProvider,
-    private modalService: ModaisProvider  
+    private modalService: ModaisProvider,
+    private linhaService: LinhasProvider
   ) {
-    console.log("MapaCidadePage::")
+    console.log("MapaCidadePage:: Construtor")
     this.L = leaflet;
 
     this.estacaoService.getEstacoesAPI()
@@ -42,8 +47,6 @@ export class MapaCidadePage {
       .subscribe((data: Modal[]) => {
         this.modais = data;
       })  
-
-    this.visible = true;
   }
 
   criarMapa(estacoes) {
@@ -74,21 +77,29 @@ export class MapaCidadePage {
   adicionarMarcadoresDasEstacoes(estacoes) {
     estacoes.forEach(estacao => {
       this.L.marker(estacao.geo)
-        .on('click', (estacaoEvent => {
-          this.map.flyTo(estacao.geo);
+      
+      .on('click', (estacaoEvent => {
+        let linhas: Linha[];
 
-          let popover = this.popoverCtrl.create(EstacaoPopoverPage, {estacao: estacao, modais: this.modais }, {showBackdrop: true});
+        this.linhaService.getLinhasPorEstacao(estacao.id)
+        .subscribe((data: Linha[]) => {
+          linhas = data;  
+          let popover = this.popoverCtrl.create(EstacaoPopoverPage, {estacao: estacao, modais: this.modais, linhas: linhas }, {cssClass: 'custom-popover'});
           let ev = { target : { getBoundingClientRect : () => { return {
-                  top: '65',
-                  left: '0'
+                  
                 };
               }
             }
           };
+          this.map.flyTo(estacao.geo);
+
+          console.log(this.clickEvent);
           
+          // if (this.clickEvent) popover.present(this.clickEvent);
           if (this.clickEvent) popover.present({ ev });
-        }))
-        .addTo(this.map);
+        })
+      }))
+      .addTo(this.map);
     });
   }
 

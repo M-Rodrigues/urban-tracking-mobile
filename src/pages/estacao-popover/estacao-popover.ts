@@ -2,8 +2,8 @@ import { Estacao } from './../../models/estacao';
 import { Modal } from './../../models/modal';
 import { Linha } from './../../models/linha';
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
-import { LinhasProvider } from '../../providers/linhas/linhas';
+import { NavController, NavParams, ViewController, App } from 'ionic-angular';
+import { EstacaoInfoPage } from '../estacao-info/estacao-info';
 
 @Component({
   selector: 'page-estacao-popover',
@@ -18,17 +18,13 @@ export class EstacaoPopoverPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    private linhaService: LinhasProvider  
+    public appCtrl: App 
   ) {
     this.estacao = this.navParams.data.estacao;
+    this.linhas = this.navParams.data.linhas;
+
     let aux : Modal[] = this.navParams.data.modais;
     this.modal =  aux.find((modal: Modal) => { return modal.id == this.estacao.idModal });
-
-    this.linhaService.getLinhasPorEstacao(this.estacao.id)
-      .subscribe((data: Linha[]) => {
-        this.linhas = data;
-        console.log(this.linhas);
-      })
   }
 
   ionViewWillEnter(){
@@ -40,6 +36,8 @@ export class EstacaoPopoverPage {
 
   close() {
     this.viewCtrl.dismiss();
+    this.appCtrl.getRootNav().push(EstacaoInfoPage, {estacao: this.estacao, modal: this.modal, linhas: this.linhas});
+    // this.navCtrl.push(EstacaoInfoPage,{estacao: this.estacao, modal: this.modal, linhas: this.linhas});
   }
 
 }
