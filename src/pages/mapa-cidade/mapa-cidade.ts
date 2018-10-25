@@ -1,3 +1,5 @@
+import { Composicao } from './../../models/composicao';
+import { ComposicoesProvider } from './../../providers/composicoes/composicoes';
 import { Component } from '@angular/core';
 import leaflet from 'leaflet';
 
@@ -22,8 +24,13 @@ export class MapaCidadePage {
   map: any;
   L: leaflet;
   clickEvent: any;
+
   estacoes: Estacao[];
   modais: Modal[];
+  composicoes: Composicao[];
+
+  compMarkers: any;
+  refresher: any;
 
   constructor(
     public navCtrl: NavController,
@@ -32,7 +39,8 @@ export class MapaCidadePage {
     private popoverCtrl: PopoverController,
     private estacaoService: EstacoesProvider,
     private modalService: ModaisProvider,
-    private linhaService: LinhasProvider
+    private linhaService: LinhasProvider,
+    private composicaoService: ComposicoesProvider
   ) {
     console.log("MapaCidadePage:: Construtor")
     this.L = leaflet;
@@ -46,7 +54,15 @@ export class MapaCidadePage {
     this.modalService.getModaisAPI()
       .subscribe((data: Modal[]) => {
         this.modais = data;
-      })  
+      })    
+  }
+
+  ionViewWillEnter(){
+    if (this.compMarkers) this.liveReloadComposicoes();
+  }
+
+  ionViewWillLeave(){
+    clearTimeout(this.refresher);
   }
 
   criarMapa(estacoes) {
@@ -55,6 +71,8 @@ export class MapaCidadePage {
       center: [-22.954530252408052, -43.167351521806495],
       zoom: 13,
       zoomControl: false
+    }).on('click', (mouseEvent) => {
+      console.log(mouseEvent);
     });
   
     // Adicionando a Layer com o mapa do mapbox
@@ -72,6 +90,41 @@ export class MapaCidadePage {
     
     // Marcador para cada estacao
     this.adicionarMarcadoresDasEstacoes(estacoes);
+
+    // LiveReload das Composicoes
+    this.liveReloadComposicoes();
+  }
+
+  liveReloadComposicoes() {
+    this.refresher = setInterval(() => {
+      this.composicaoService.getComposicoes()
+        .then((data: any) => {
+          if (data.erro == {}) {
+            console.log("Erro no refresh das Composicoes");
+          } else {
+            if (this.compMarkers) this.removerMarcadoresDasComposicoes(this.compMarkers);
+            
+            this.compMarkers = [];
+            this.composicoes = data;
+            this.adicionarMarcadoresDasComposicoes(data);
+          }
+          console.log(data);
+        });
+    }, 2000);
+  }
+
+  adicionarMarcadoresDasComposicoes(composicoes) {
+    composicoes.forEach(composicao => {
+      let marcador = this.L.marker(composicao.geo).addTo(this.map);
+
+      this.compMarkers.push(marcador);
+    });
+  }
+
+  removerMarcadoresDasComposicoes(marcadores) {
+    marcadores.forEach(marcador => {
+      marcador.removeFrom(this.map);
+    });
   }
 
   adicionarMarcadoresDasEstacoes(estacoes) {
@@ -84,7 +137,7 @@ export class MapaCidadePage {
         this.linhaService.getLinhasPorEstacao(estacao.id)
         .subscribe((data: Linha[]) => {
           linhas = data;  
-          let popover = this.popoverCtrl.create(EstacaoPopoverPage, {estacao: estacao, modais: this.modais, linhas: linhas }, {cssClass: 'custom-popover'});
+          let popover = this.popoverCtrl.create(EstacaoPopoverPage, {estacao: estacao, modais: this.modais, linhas: linhas, refresher: this.refresher }, {cssClass: 'custom-popover'});
           let ev = { target : { getBoundingClientRect : () => { return {
                   
                 };

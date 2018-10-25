@@ -23,6 +23,10 @@ export class EstacaoInfoPage {
     this.modal = this.navParams.data.modal;
     this.estacao = this.navParams.data.estacao;
     this.linhas = this.navParams.data.linhas;
+
+    if (this.navParams.data.refresher) {
+      clearTimeout(this.navParams.data.refresher);
+    }
   }
 
   onToLinhaPage(linha) {

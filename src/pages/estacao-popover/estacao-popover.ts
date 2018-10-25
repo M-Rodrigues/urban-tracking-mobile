@@ -14,6 +14,8 @@ export class EstacaoPopoverPage {
   modal: Modal;
   linhas: Linha[];
 
+  refresher: any;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -25,6 +27,7 @@ export class EstacaoPopoverPage {
 
     let aux : Modal[] = this.navParams.data.modais;
     this.modal =  aux.find((modal: Modal) => { return modal.id == this.estacao.idModal });
+    this.refresher = this.navParams.data.refresher;
   }
 
   ionViewWillEnter(){
@@ -36,7 +39,7 @@ export class EstacaoPopoverPage {
 
   close() {
     this.viewCtrl.dismiss();
-    this.appCtrl.getRootNav().push(EstacaoInfoPage, {estacao: this.estacao, modal: this.modal, linhas: this.linhas});
+    this.appCtrl.getRootNav().push(EstacaoInfoPage, {estacao: this.estacao, modal: this.modal, linhas: this.linhas, refresher: this.refresher});
     // this.navCtrl.push(EstacaoInfoPage,{estacao: this.estacao, modal: this.modal, linhas: this.linhas});
   }
 

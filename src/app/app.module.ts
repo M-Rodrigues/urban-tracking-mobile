@@ -27,6 +27,7 @@ import { DatabaseProvider } from '../providers/database/database';
 
 // Plugins
 import { Geolocation } from '@ionic-native/geolocation';
+import { ComposicoesProvider } from '../providers/composicoes/composicoes';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     EstacoesProvider,
     ModaisProvider,
     LinhasProvider,
-    DatabaseProvider
+    DatabaseProvider,
+    ComposicoesProvider
   ]
 })
 export class AppModule {}
