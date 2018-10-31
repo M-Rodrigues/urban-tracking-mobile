@@ -32,6 +32,6 @@ export class ModaisProvider {
   }
 
   getModaisAPI() {
-    return this.httpClient.get('https://stark-woodland-16146.herokuapp.com/modais');
+    return this.httpClient.get('https://stark-woodland-16146.herokuapp.com/modais').toPromise();
   }
 }

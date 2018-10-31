@@ -29,8 +29,10 @@ export class MapaCidadePage {
   modais: Modal[];
   composicoes: Composicao[];
 
+  estacaoMarkers: any;
   compMarkers: any;
   refresher: any;
+  fabIcon: string = 'bus';
 
   constructor(
     public navCtrl: NavController,
@@ -45,16 +47,20 @@ export class MapaCidadePage {
     console.log("MapaCidadePage:: Construtor")
     this.L = leaflet;
 
-    this.estacaoService.getEstacoesAPI()
-      .subscribe((data: Estacao[]) => {
-        this.estacoes = data;
-        this.criarMapa(data);
-      });
-    
-    this.modalService.getModaisAPI()
-      .subscribe((data: Modal[]) => {
-        this.modais = data;
-      })    
+    Promise.all([
+      this.estacaoService.getEstacoesAPI(),
+      this.modalService.getModaisAPI(),
+      this.composicaoService.getComposicoes()
+    ])
+    .then((result) => {
+      console.log(result);
+      this.estacoes = result[0];
+      this.criarMapa(this.estacoes);
+
+      this.modais = result[1];
+      this.composicoes = result[2];
+    })
+
   }
 
   ionViewWillEnter(){
@@ -66,6 +72,7 @@ export class MapaCidadePage {
   }
 
   criarMapa(estacoes) {
+    this.estacoes = estacoes;
     // Criando Mapa
     this.map = this.L.map('mapaCidade', {
       center: [-22.954530252408052, -43.167351521806495],
@@ -89,7 +96,7 @@ export class MapaCidadePage {
     this.map.flyTo([-22.954530252408052, -43.167351521806495],14);
     
     // Marcador para cada estacao
-    this.adicionarMarcadoresDasEstacoes(estacoes);
+    // this.adicionarMarcadoresDasEstacoes(estacoes);
 
     // LiveReload das Composicoes
     this.liveReloadComposicoes();
@@ -120,17 +127,11 @@ export class MapaCidadePage {
       this.compMarkers.push(marcador);
     });
   }
-
-  removerMarcadoresDasComposicoes(marcadores) {
-    marcadores.forEach(marcador => {
-      marcador.removeFrom(this.map);
-    });
-  }
-
+  
   adicionarMarcadoresDasEstacoes(estacoes) {
+    this.estacaoMarkers = [];
     estacoes.forEach(estacao => {
-      this.L.marker(estacao.geo)
-      
+      let mk = this.L.marker(estacao.geo)
       .on('click', (estacaoEvent => {
         let linhas: Linha[];
 
@@ -146,15 +147,30 @@ export class MapaCidadePage {
           };
           this.map.flyTo(estacao.geo);
 
-          console.log(this.clickEvent);
+          //console.log(this.clickEvent);
           
-          // if (this.clickEvent) popover.present(this.clickEvent);
           if (this.clickEvent) popover.present({ ev });
         })
       }))
       .addTo(this.map);
+
+      this.estacaoMarkers.push(mk);
     });
   }
+
+  removerMarcadoresDasComposicoes(marcadores) {
+    marcadores.forEach(marcador => {
+      marcador.removeFrom(this.map);
+    });
+  }
+  
+  removerMarcadoresDasEstacoes(estacoes) {
+    estacoes.forEach(estacao => {
+      estacao.removeFrom(this.map);
+    });
+    estacoes = [];
+  }
+
 
   onLocate() {
     console.log('MapaCidadePage::onLocate()');
@@ -172,5 +188,36 @@ export class MapaCidadePage {
 
   onShowMenu() {
     this.menuCtrl.open();
+  }
+
+  onChangeMarkers() {
+    if (this.fabIcon == 'bus') {
+      //Parar o live reload
+      clearTimeout(this.refresher);
+
+      //Retirar os marcadores das composicoes
+      this.removerMarcadoresDasComposicoes(this.compMarkers);
+
+      //Colocar os marcadores das estacoes
+      this.estacaoService.getEstacoesAPI()
+        .then(data => {
+          console.log(data);
+          this.adicionarMarcadoresDasEstacoes(data);
+        })
+
+      
+      
+      this.fabIcon = 'git-commit';
+    } else {
+      //Ativar o liveReload das composições
+      this.liveReloadComposicoes();
+
+      // Remover os marcadores das estacoes
+      this.removerMarcadoresDasEstacoes(this.estacaoMarkers);
+
+      //Colocar os marcadores das Composicoes
+
+      this.fabIcon = 'bus';
+    }
   }
 }

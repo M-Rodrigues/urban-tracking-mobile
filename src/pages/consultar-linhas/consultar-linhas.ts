@@ -37,7 +37,7 @@ export class ConsultarLinhasPage {
       });
     
     this.modalService.getModaisAPI()
-      .subscribe((data: Modal[]) => {
+      .then((data: Modal[]) => {
         this.modais = data;
         
         this.filtros = [];

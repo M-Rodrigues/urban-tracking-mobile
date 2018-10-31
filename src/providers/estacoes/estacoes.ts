@@ -38,6 +38,6 @@ export class EstacoesProvider {
   }
 
   getEstacoesAPI() {
-    return this.httpClient.get("https://stark-woodland-16146.herokuapp.com/estacoes");
+    return this.httpClient.get("https://stark-woodland-16146.herokuapp.com/estacoes").toPromise();
   }
 }

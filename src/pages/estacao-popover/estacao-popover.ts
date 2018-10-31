@@ -40,7 +40,6 @@ export class EstacaoPopoverPage {
   close() {
     this.viewCtrl.dismiss();
     this.appCtrl.getRootNav().push(EstacaoInfoPage, {estacao: this.estacao, modal: this.modal, linhas: this.linhas, refresher: this.refresher});
-    // this.navCtrl.push(EstacaoInfoPage,{estacao: this.estacao, modal: this.modal, linhas: this.linhas});
   }
 
 }
